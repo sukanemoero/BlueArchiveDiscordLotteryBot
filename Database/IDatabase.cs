@@ -1,5 +1,4 @@
 using System;
-using dcbot.Exceptions;
 using dcbot.Exceptions.Database;
 
 namespace dcbot.Database;
@@ -7,7 +6,7 @@ namespace dcbot.Database;
 public interface IDatabase
 {
     protected static Mysql Sql =>
-        (Db ?? throw new DatabaseNotConnected()).IsConnected() ? Db : throw new DatabaseNotConnected();
+        (Db ?? throw new DatabaseNotConnected()).IsConnected() ? Db : Db.Connect();
 
     private static Mysql Db { get; set; }
 

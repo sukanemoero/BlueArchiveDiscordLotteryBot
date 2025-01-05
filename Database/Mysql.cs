@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using dcbot.Exceptions.Database;
 using MySql.Data.MySqlClient;
 
 namespace dcbot.Database;
@@ -11,7 +12,7 @@ public class Mysql(string host, string user, string password, string database)
     private readonly string _cs = $"server={host};user={user};password={password};database={database}";
     private MySqlConnection Connection { get; set; }
 
-    public void Connect()
+    public Mysql Connect()
     {
         Console.WriteLine("Connecting to database... ");
         Connection = new MySqlConnection(_cs);
@@ -19,6 +20,10 @@ public class Mysql(string host, string user, string password, string database)
         Console.WriteLine(Connection.Ping()
             ? $"Database Connected: {Connection.ServerVersion}"
             : "Database Not Connected");
+        if (Connection.Ping()) return this;
+        throw new DatabaseNotConnected();
+
+
     }
 
     public class TableValue(string table, string value)
